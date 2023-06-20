@@ -1,0 +1,22 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:13.1-alpine
+    ports:
+      - 127.0.0.1:5432:5432
+    environment:
+      POSTGRES_USER: github
+      POSTGRES_PASSWORD: github
+      POSTGRES_DB: github
+  rest-api:
+    build:
+      context: ./
+      dockerfile: dockerfile.backend
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_USER: github
+      POSTGRES_PASSWORD: github
+      POSTGRES_DB: github
+    ports:
+      - "127.0.0.1:8080:8080"

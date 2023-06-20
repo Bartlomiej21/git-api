@@ -1,0 +1,4 @@
+FROM amazoncorretto:17.0.0-alpine
+ADD target/Api-github-0.0.1-SNAPSHOT.jar api-github.jar
+ENTRYPOINT ["java","-jar","api-github.jar"]
+EXPOSE 8080
