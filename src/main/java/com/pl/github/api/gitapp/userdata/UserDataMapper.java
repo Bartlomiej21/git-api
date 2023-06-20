@@ -8,8 +8,10 @@ import org.springframework.stereotype.Component;
 public class UserDataMapper {
 
     UserDataEntity toEntity(GitHubResponse response) {
+        int requestCount = 0;
         return new UserDataEntity(response.getId(),
-                response.getLogin(), 0);
+                response.getLogin().toLowerCase(),
+                requestCount);
     }
 
     UserDataView toView(GitHubResponse response, double calculations) {

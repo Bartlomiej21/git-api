@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
+
 @Value
 @AllArgsConstructor
 @Builder
@@ -18,7 +19,7 @@ public class GitHubResponse {
     @JsonProperty("id")
     Long id;
 
-    @JsonProperty("login")
+    @JsonProperty(value = "login")
     String login;
 
     @JsonProperty("name")

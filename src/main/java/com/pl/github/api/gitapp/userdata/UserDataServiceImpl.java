@@ -35,12 +35,15 @@ public class UserDataServiceImpl implements UserDataService {
     private final UserDataMapper mapper;
 
     @Transactional
-    public UserDataView getUserData(String login) {
-        final var uri = createApiUri(login);
-        final var response = createResponse(uri, login);
-        final var entity = repository.findByLogin(login).orElseGet(() -> repository.save(mapper.toEntity(response)));
+    public UserDataView getUserData(String gitHubLogin) {
+        final var login = gitHubLogin.toLowerCase();
+        final var URI = createApiUri(login);
+        final var response = createResponse(URI, login);
+        final var entity = repository.findByLogin(login)
+                .orElseGet(() -> repository.save(mapper.toEntity(response)));
 
         log.info("Retrieving entity by login {}", entity.getLogin());
+
         entity.incrementRequestCount();
         final var calculationResult = calculations.calculateByFollowersAndPublicRepos(response);
         return mapper.toView(response, calculationResult);
@@ -56,8 +59,9 @@ public class UserDataServiceImpl implements UserDataService {
 
     private GitHubResponse createResponse(String uri, String login) {
         try {
-            final var githubResponse = restTemplate.exchange(uri, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
-            });
+            final var githubResponse = restTemplate
+                    .exchange(uri, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
+                    });
 
             log.info("Get response for uri: {}", uri);
             return Optional.ofNullable(githubResponse).map(response -> {
@@ -73,17 +77,5 @@ public class UserDataServiceImpl implements UserDataService {
             }
             throw new CorruptedGitHubResponseException();
         }
-    }
-
-    private UserDataEntity getEntity(String login, GitHubResponse response) {
-        final Optional<UserDataEntity> optionalEntity = repository.findByLogin(login);
-        UserDataEntity entity;
-        if (optionalEntity.isPresent()) {
-            entity = optionalEntity.get();
-        } else {
-            entity = mapper.toEntity(response);
-            entity = repository.save(entity);
-        }
-        return entity;
     }
 }

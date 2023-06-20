@@ -20,7 +20,7 @@ import lombok.Setter;
 public class UserDataEntity {
 
     @Id
-    private Long id; // this used to be String
+    private Long id;
 
     private String login;
     private int requestCount;
