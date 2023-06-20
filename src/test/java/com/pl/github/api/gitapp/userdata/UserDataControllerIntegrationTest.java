@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Sql(scripts = "/reset-and-insert-data.sql")
-class UserDataIntegrationTest extends TestPostgresContainer {
+class UserDataControllerIntegrationTest extends TestPostgresContainer {
 
 
     @Autowired
@@ -45,6 +45,28 @@ class UserDataIntegrationTest extends TestPostgresContainer {
         MvcResult actual =
                 mockMvc
                         .perform(MockMvcRequestBuilders.get(gitHubURL))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        UserDataView userDataResult =
+                objectMapper.readValue(actual.getResponse().getContentAsString(), UserDataView.class);
+
+        // then
+        assertEquals(USER_DATA.getId(), Long.parseLong(userDataResult.getId()));
+        assertEquals(USER_DATA.getLogin(), userDataResult.getLogin());
+        assertEquals(USER_DATA.getRequestCount(), 1);
+    }
+
+    @Test
+    @SneakyThrows
+    void shouldNotGetUserDataIfLoginNull() {
+        // given
+        String gitHubURL = "/users/{login}";
+
+        // when
+        MvcResult actual =
+                mockMvc
+                        .perform(MockMvcRequestBuilders.get(gitHubURL, "%20"))
                         .andExpect(status().isOk())
                         .andReturn();
 

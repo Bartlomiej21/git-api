@@ -1,5 +1,6 @@
 package com.pl.github.api.gitapp.userdata.exception;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,7 +21,7 @@ public class GitHubExceptionHandler {
     }
 
     @ResponseStatus(BAD_REQUEST)
-    @ExceptionHandler({CorruptedGitHubResponseException.class, GitHubEmptyResponseException.class})
+    @ExceptionHandler({CorruptedGitHubResponseException.class, MismatchedInputException.class})
     public ErrorMessage handleWrongResponseException(Exception ex) {
         log.error(ex.getMessage(), ex);
         return new ErrorMessage(BAD_REQUEST.value(), ex.getMessage());

@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: github
       POSTGRES_PASSWORD: github
       POSTGRES_DB: github
+    volumes:
+      - postgres_data_ga:/var/lib/postgresql/data
   rest-api:
     build:
       context: ./
@@ -20,3 +22,5 @@ services:
       POSTGRES_DB: github
     ports:
       - "127.0.0.1:8080:8080"
+volumes:
+  postgres_data_ga:

@@ -3,7 +3,6 @@ package com.pl.github.api.gitapp.userdata;
 import com.pl.github.api.gitapp.userdata.dto.GitHubResponse;
 import com.pl.github.api.gitapp.userdata.dto.UserDataView;
 import com.pl.github.api.gitapp.userdata.exception.CorruptedGitHubResponseException;
-import com.pl.github.api.gitapp.userdata.exception.GitHubEmptyResponseException;
 import com.pl.github.api.gitapp.userdata.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,30 +36,14 @@ public class UserDataServiceImpl implements UserDataService {
 
     @Transactional
     public UserDataView getUserData(String login) {
-        return Optional.ofNullable(login).map(log -> {
-            final var uri = createApiUri(log);
-            final var response = createResponse(uri, log);
-//            final var entity = getEntity(log, response);
-            final var entity = repository.findByLogin(login).orElse(repository.save(mapper.toEntity(response)));
-            // TODO this might actually work if I add ignoreCase somewhere
-//            final var entity = repository.findByLogin(login).orElseThrow(()-> new UserNotFoundException(login));
+        final var uri = createApiUri(login);
+        final var response = createResponse(uri, login);
+        final var entity = repository.findByLogin(login).orElseGet(() -> repository.save(mapper.toEntity(response)));
 
-//            final Optional<UserDataEntity> optionalEntity = repository.findByLogin(login);
-//            UserDataEntity entity;
-//            if (optionalEntity.isPresent()) {
-//                entity = optionalEntity.get();
-//            } else {
-//                entity = mapper.toEntity(response);
-//                entity = repository.save(entity);
-//            }
-            UserDataServiceImpl.log.info("Retrieving entity by login {}", entity.getLogin());
-            entity.incrementRequestCount();
-            final var calculationResult = calculations.calculateByFollowersAndPublicRepos(response);
-
-            return Optional.ofNullable(response)
-                    .map(body -> mapper.toView(response, calculationResult))
-                    .orElseThrow(GitHubEmptyResponseException::new);
-        }).orElseThrow(() -> new IllegalArgumentException("Login cannot be null"));
+        log.info("Retrieving entity by login {}", entity.getLogin());
+        entity.incrementRequestCount();
+        final var calculationResult = calculations.calculateByFollowersAndPublicRepos(response);
+        return mapper.toView(response, calculationResult);
     }
 
     private String createApiUri(String login) {
@@ -72,7 +55,6 @@ public class UserDataServiceImpl implements UserDataService {
     }
 
     private GitHubResponse createResponse(String uri, String login) {
-//        RestTemplate restTemplate = new RestTemplate();
         try {
             final var githubResponse = restTemplate.exchange(uri, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
             });
