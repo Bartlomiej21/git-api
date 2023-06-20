@@ -40,8 +40,8 @@ public class UserDataServiceImpl implements UserDataService {
         return Optional.ofNullable(login).map(log -> {
             final var uri = createApiUri(log);
             final var response = createResponse(uri, log);
-            final var entity = getEntity(log, response);
-            //final var entity = repository.findByLogin(login).orElse(repository.save(mapper.toEntity(response)));
+//            final var entity = getEntity(log, response);
+            final var entity = repository.findByLogin(login).orElse(repository.save(mapper.toEntity(response)));
             // TODO this might actually work if I add ignoreCase somewhere
 //            final var entity = repository.findByLogin(login).orElseThrow(()-> new UserNotFoundException(login));
 

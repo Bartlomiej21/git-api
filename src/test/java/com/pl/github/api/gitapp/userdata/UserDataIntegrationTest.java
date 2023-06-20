@@ -56,52 +56,5 @@ class UserDataIntegrationTest extends TestPostgresContainer {
         assertEquals(USER_DATA.getLogin(), userDataResult.getLogin());
         assertEquals(USER_DATA.getRequestCount(), 1);
     }
-//
-//    @Disabled
-//    @Test
-//    @SneakyThrows
-//    void shouldSaveNewUserDataEntity() {
-//        // todo actual returns UserDataView so it does not work
-//        // given
-//        String gitHubURL = GITHUB_ENDPOINT_2;
-//
-//        // when
-//        MvcResult actual =
-//                mockMvc
-//                        .perform(MockMvcRequestBuilders.get(gitHubURL))
-//                        .andExpect(status().isOk())
-//                        .andReturn();
-//
-//        GitHubResponse gitHubResponseResult =
-//                objectMapper.readValue(actual.getResponse().getContentAsString(), GitHubResponse.class);
-//
-//        // then
-//        assertEquals(GITHUB_RESPONSE.getPublicRepos(), gitHubResponseResult.getPublicRepos());
-//        assertEquals(GITHUB_RESPONSE.getFollowers(), gitHubResponseResult.getFollowers());
-//    }
-
-
-//    @Test
-//    @SneakyThrows
-//    void shouldUpdateVisit() {
-//        // given
-//        String visitURL = VISIT_ENDPOINT;
-//
-//        // when
-//        MvcResult actual =
-//                mockMvc
-//                        .perform(
-//                                MockMvcRequestBuilders.put(visitURL)
-//                                        .contentType(MediaType.APPLICATION_JSON)
-//                                        .content(JSON_UPDATE))
-//                        .andExpect(status().isOk())
-//                        .andReturn();
-//
-//        VisitDTOView visitResult =
-//                objectMapper.readValue(actual.getResponse().getContentAsString(), VisitDTOView.class);
-//
-//        // then
-//        assertEquals(UPDATED_MEDICAL_ID, visitResult.medicalServiceId());
-//    }
 
 }

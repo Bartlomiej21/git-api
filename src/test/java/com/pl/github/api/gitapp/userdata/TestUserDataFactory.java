@@ -1,15 +1,19 @@
 package com.pl.github.api.gitapp.userdata;
 
 import com.pl.github.api.gitapp.userdata.dto.GitHubResponse;
+import com.pl.github.api.gitapp.userdata.dto.UserDataView;
 
 
 class TestUserDataFactory {
     static final Long ID = 7073L;
     static final String LOGIN = "master";
 
+    static final String INVALID_LOGIN = "jsfdungfd743";
+
     static final int REQUEST_COUNT = 1;
 
     static final Long RESPONSE_ID = 75323382L;
+    static final String RESPONSE_ID_STRING = "75323382";
     static final String RESPONSE_LOGIN = "Bartlomiej21";
     static final String NAME = null;
     static final String TYPE = "user";
@@ -36,6 +40,8 @@ class TestUserDataFactory {
                     .publicRepos(PUBLIC_REPOS)
                     .followers(FOLLOWERS)
                     .build();
+
+    static final UserDataView USER_DATA_VIEW = null; //todo usunąć
 
 
     static final String GITHUB_ENDPOINT = "/users/master";
