@@ -6,4 +6,3 @@ public class UserNotFoundException extends RuntimeException {
         super("User with login " + login + " not found");
     }
 }
-

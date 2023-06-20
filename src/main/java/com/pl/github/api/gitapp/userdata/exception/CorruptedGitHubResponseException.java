@@ -5,5 +5,3 @@ public class CorruptedGitHubResponseException extends RuntimeException {
         super("Unable to get proper response");
     }
 }
-
-
