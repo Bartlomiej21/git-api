@@ -3,6 +3,7 @@ package com.pl.github.api.gitapp.userdata;
 import com.pl.github.api.gitapp.userdata.dto.GitHubResponse;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class CalculationsService {
 

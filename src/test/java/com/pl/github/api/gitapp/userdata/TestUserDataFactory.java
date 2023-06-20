@@ -20,7 +20,6 @@ class TestUserDataFactory {
     static final String URI_TEMPLATE = "/users/{login}";
     static final String INVALID_LOGIN = "jsfdungfd743";
 
-
     static final UserDataEntity USER_DATA =
             UserDataEntity.builder()
                     .id(ID)

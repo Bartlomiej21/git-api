@@ -31,6 +31,7 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+
 @ExtendWith(MockitoExtension.class)
 class UserDataServiceImplTest {
 
@@ -50,30 +51,25 @@ class UserDataServiceImplTest {
     @Test
     void shouldGetUserData() {
         // given
-        final var response = new ResponseEntity<GitHubResponse>(GITHUB_RESPONSE, HttpStatus.OK);
+        final var response = new ResponseEntity<>(GITHUB_RESPONSE, HttpStatus.OK);
         given(restTemplate.exchange(GITHUB_URI, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
         })).willReturn(response);
-
         given(repository.findByLogin(LOGIN))
                 .willReturn(Optional.ofNullable(USER_DATA));
-
-
         // when
         UserDataView actualUserDataView = service.getUserData(LOGIN);
-
         // then
         assertEquals(ID_STRING, actualUserDataView.getId());
+        assertEquals(LOGIN, actualUserDataView.getLogin());
     }
 
     @Test
     void shouldThrowUserNotFoundExceptionIfNoUser() {
         // given
-        final var response = new ResponseEntity<GitHubResponse>(GITHUB_RESPONSE, HttpStatus.OK);
         final var clientErrorException = mock(HttpClientErrorException.class);
         given(clientErrorException.getStatusCode()).willReturn(NOT_FOUND);
         given(restTemplate.exchange(GITHUB_URI, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
         })).willThrow(clientErrorException);
-
         // when
         final var exception =
                 assertThrows(
@@ -86,12 +82,10 @@ class UserDataServiceImplTest {
     @Test
     void shouldThrowCorruptedGitHubResponseExceptionIfInvalidResponse() {
         // given
-        final var response = new ResponseEntity<GitHubResponse>(GITHUB_RESPONSE, HttpStatus.OK);
         final var clientErrorException = mock(HttpClientErrorException.class);
         given(clientErrorException.getStatusCode()).willReturn(BAD_REQUEST);
         given(restTemplate.exchange(GITHUB_URI, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
         })).willThrow(clientErrorException);
-
         // when
         final var exception =
                 assertThrows(
@@ -102,13 +96,11 @@ class UserDataServiceImplTest {
     }
 
     @Test
-    void shouldThrowGitHubEmptyResponseExceptionIfEmptyResponse() {
+    void shouldThrowCorruptedGitHubResponseExceptionIfEmptyResponse() {
         // given
         final ResponseEntity<GitHubResponse> response = null;
-
         given(restTemplate.exchange(GITHUB_URI, GET, null, new ParameterizedTypeReference<GitHubResponse>() {
         })).willReturn(response);
-
         // when
         final var exception =
                 assertThrows(

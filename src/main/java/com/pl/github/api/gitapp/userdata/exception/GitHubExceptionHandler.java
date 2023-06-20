@@ -27,7 +27,3 @@ public class GitHubExceptionHandler {
         return new ErrorMessage(BAD_REQUEST.value(), ex.getMessage());
     }
 }
-
-
-
-

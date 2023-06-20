@@ -19,19 +19,16 @@ import java.util.Optional;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserDataServiceImpl implements UserDataService {
 
     private static final String API_URI = "https://api.github.com/users/{login}";
-
     private final UserRepository repository;
-
     private final CalculationsService calculations;
-
     private final RestTemplate restTemplate;
-
     private final UserDataMapper mapper;
 
     @Transactional
@@ -64,7 +61,8 @@ public class UserDataServiceImpl implements UserDataService {
                     });
 
             log.info("Get response for uri: {}", uri);
-            return Optional.ofNullable(githubResponse).map(response -> {
+            return Optional.ofNullable(githubResponse)
+                    .map(response -> {
                         final var body = response.getBody();
                         log.info("Get response for uri: {}", body);
                         return body;

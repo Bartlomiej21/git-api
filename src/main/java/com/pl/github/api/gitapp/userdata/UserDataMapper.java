@@ -4,6 +4,7 @@ import com.pl.github.api.gitapp.userdata.dto.GitHubResponse;
 import com.pl.github.api.gitapp.userdata.dto.UserDataView;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class UserDataMapper {
 
